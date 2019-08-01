@@ -17,63 +17,40 @@
  */
 package com.hejunlin.liveplayback.ui;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.TextView;
 
 import com.hejunlin.liveplayback.OptionItemAdapter;
 import com.hejunlin.liveplayback.R;
-import com.hejunlin.liveplayback.widget.MetroViewBorderImpl;
 
-import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends Activity {
-
-    private MetroViewBorderImpl mMetroViewBorderImpl;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mMetroViewBorderImpl = new MetroViewBorderImpl(this);
-        mMetroViewBorderImpl.setBackgroundResource(R.drawable.border_color);
-        loadRecyclerViewMenuItem();
+
+//        TextView version = findViewById(R.id.version);
+//        version.setText(getVersionName());
+        RecyclerView recyclerView  = findViewById(R.id.ry_menu_item);
+        OptionItemAdapter adapter = new OptionItemAdapter(this, R.layout.detail_menu_item);
+        recyclerView.setAdapter(adapter);
     }
 
-    @SuppressLint("SetTextI18n")
-    private void loadRecyclerViewMenuItem() {
-        TextView version = (TextView) findViewById(R.id.version);
+    private String getVersionName() {
         try {
-            PackageInfo packageInfo = this.getApplicationContext()
-                    .getPackageManager()
-                    .getPackageInfo(this.getPackageName(), 0);
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             String versionName = packageInfo.versionName;
             int    versionCode = packageInfo.versionCode;
-            version.setText("版本 : " + versionName + "." + versionCode);
+            return String.format(Locale.getDefault(), "版本 : %s.%d", versionName, versionCode);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        RecyclerView      recyclerView  = (RecyclerView) findViewById(R.id.ry_menu_item);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setFocusable(false);
-        mMetroViewBorderImpl.attachTo(recyclerView);
-        createOptionItemData(recyclerView, R.layout.detail_menu_item);
-    }
-
-    private void createOptionItemData(RecyclerView recyclerView, int id) {
-        OptionItemAdapter adapter = new OptionItemAdapter(this, id);
-        recyclerView.setAdapter(adapter);
-        recyclerView.scrollToPosition(0);
+        return null;
     }
 }

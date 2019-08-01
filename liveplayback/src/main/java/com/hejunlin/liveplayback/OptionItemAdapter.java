@@ -18,9 +18,9 @@
 package com.hejunlin.liveplayback;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,72 +29,38 @@ import android.widget.TextView;
 import com.hejunlin.liveplayback.ui.LiveActivity;
 
 import java.util.List;
+import java.util.Locale;
 
 public class OptionItemAdapter extends RecyclerView.Adapter<OptionItemAdapter.ViewHolder> {
 
-
     private List<DataBean>             list;
     private Context                    mContext;
-    private int                        id;
-    private View.OnFocusChangeListener mOnFocusChangeListener;
-    private OnBindListener             onBindListener;
-    private static final String TAG = OptionItemAdapter.class.getSimpleName();
+    private int                        resId;
 
-    public interface OnBindListener {
-        void onBind(View view, int i);
-    }
-
-    public OptionItemAdapter(Context context) {
+    public OptionItemAdapter(Context context, @LayoutRes int resId) {
         super();
         mContext = context;
-    }
-
-    public OptionItemAdapter(Context context, int id) {
-        super();
-        mContext = context;
-        this.id = id;
+        this.resId = resId;
         this.list = LiveMangager.getList();
     }
 
-    public OptionItemAdapter(Context context, int id, View.OnFocusChangeListener onFocusChangeListener) {
-        super();
-        mContext = context;
-        this.id = id;
-        this.mOnFocusChangeListener = onFocusChangeListener;
-    }
-
-    public void setOnBindListener(OnBindListener onBindListener) {
-        this.onBindListener = onBindListener;
-    }
-
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        int resId = R.layout.detail_menu_item;
-        if (this.id > 0) {
-            resId = this.id;
-        }
-        View view = LayoutInflater.from(mContext).inflate(resId, viewGroup, false);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(resId, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int i) {
-        if (list.size() == 0) {
-            Log.d(TAG, "mDataset has no data!");
-            return;
-        }
-        viewHolder.mTextView.setText(list.get(i).TVName);
-        viewHolder.itemView.setTag(i);
-        viewHolder.itemView.setOnFocusChangeListener(mOnFocusChangeListener);
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.mTextView.setText(String.format(Locale.getDefault(), "%d. %s", position + 1, list.get(position).TVName));
+        holder.itemView.setTag(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LiveActivity.activityStart(mContext, list.get(i).Url, i);
+                int pos = (int) v.getTag();
+                LiveActivity.activityStart(mContext, list.get(pos).Url, pos);
             }
         });
-        if (onBindListener != null) {
-            onBindListener.onBind(viewHolder.itemView, i);
-        }
     }
 
     @Override
@@ -108,8 +74,7 @@ public class OptionItemAdapter extends RecyclerView.Adapter<OptionItemAdapter.Vi
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.tv_menu_title);
+            mTextView = itemView.findViewById(R.id.tv_menu_title);
         }
     }
-
 }

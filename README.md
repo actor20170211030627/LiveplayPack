@@ -20,3 +20,16 @@
 
 
 [参考demo,鸣谢](https://github.com/hejunlin2013/LivePlayback)
+
+
+### 注: 以上是原作者写的, 并且上面那个链接是第一个原作者的作品, 非常不错, 建议用上面那个链接...
+ 我fork后做了一点修改, 也打了个apk包...
+## Demo
+<a href="https://github.com/actor20170211030627/LiveplayPack/raw/master/liveplayback-debug.apk">download apk</a>
+
+<img src="Screenshots/qr_code.png" width=35%></img>
+
+## Screenshot
+<img src="Screenshots/1.png" width=35%></img>
+
+<img src="Screenshots/2.png"></img>

@@ -1,0 +1,8 @@
+<resources>
+    <!--没有标题栏的页面,有通知栏-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--下面2行用于设置StatusBar的颜色-->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+</resources>
